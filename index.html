@@ -8,7 +8,6 @@
     <!-- External CDN Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -161,8 +160,6 @@
             <a href="#beiradao" class="mobile-nav-link text-gray-200 hover:text-amber-400 py-1"><i class="fa-solid fa-compact-disc w-6 text-amber-400"></i> O Ritmo Beiradão</a>
             <a href="#musicas" class="mobile-nav-link text-gray-200 hover:text-amber-400 py-1"><i class="fa-solid fa-music w-6 text-amber-400"></i> Músicas e Vídeos</a>
             <a href="#galeria" class="mobile-nav-link text-gray-200 hover:text-amber-400 py-1"><i class="fa-solid fa-images w-6 text-amber-400"></i> Galeria de Fotos</a>
-            <a href="#qrcode-section" class="mobile-nav-link text-amber-300 font-bold hover:text-amber-400 py-1"><i class="fa-solid fa-qrcode w-6 text-amber-400"></i> Gerador de QR Code (Trabalho)</a>
-            <div class="pt-2 border-t border-amber-500/10 text-xs text-amber-400/80 flex items-center justify-between">
                 <span><i class="fa-solid fa-school mr-1"></i> Turma 1º Ano 05 - Matutino</span>
             </div>
         </div>
@@ -204,9 +201,6 @@
                 <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
                     <a href="#musicas" class="w-full sm:w-auto gold-gradient-button px-8 py-3.5 rounded-full font-bold text-sm tracking-wide flex items-center justify-center gap-3 shadow-xl">
                         <i class="fa-solid fa-play"></i> OUVIR O SOM DO SAX
-                    </a>
-                    <a href="#qrcode-section" class="w-full sm:w-auto bg-zinc-900 hover:bg-zinc-800 text-amber-300 border border-amber-500/40 px-8 py-3.5 rounded-full font-semibold text-sm flex items-center justify-center gap-3 transition-all hover:border-amber-400">
-                        <i class="fa-solid fa-qrcode text-amber-400"></i> GERAR QR CODE DO TRABALHO
                     </a>
                 </div>
 
@@ -575,61 +569,7 @@
     </div>
 
     <script>
-        let qrcodeObj = null;
 
-        // Initialize on DOM Load
-        window.onload = function() {
-            initQRCode();
-            setupMobileMenu();
-        };
-
-        function initQRCode() {
-            const container = document.getElementById("qrcode-container");
-            container.innerHTML = "";
-            
-            qrcodeObj = new QRCode(container, {
-                text: "https://www.youtube.com/watch?v=LMTwLZ_SetM",
-                width: 160,
-                height: 160,
-                colorDark: "#000000",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H
-            });
-        }
-
-        function handleQrOptionChange() {
-            const select = document.getElementById("qr-option-select");
-            const customContainer = document.getElementById("custom-url-container");
-            
-            if (select.value === "custom") {
-                customContainer.classList.remove("hidden");
-            } else {
-                customContainer.classList.add("hidden");
-                generateCustomQr();
-            }
-        }
-
-        function generateCustomQr() {
-            const select = document.getElementById("qr-option-select").value;
-            let targetUrl = window.location.href;
-
-            if (select === "musica") {
-                targetUrl = "https://www.youtube.com/watch?v=LMTwLZ_SetM";
-            } else if (select === "playlist") {
-                targetUrl = "https://www.youtube.com/playlist?list=PLLxGvjIVNOJ72dIRNjsSyxV98JG5Sab7r";
-            } else if (select === "custom") {
-                const customInput = document.getElementById("custom-url-input").value.trim();
-                if (customInput) {
-                    targetUrl = customInput;
-                }
-            }
-
-            if (qrcodeObj) {
-                qrcodeObj.clear();
-                qrcodeObj.makeCode(targetUrl);
-                showToast("QR Code atualizado com sucesso!");
-            }
-        }
 
 
         function switchBioTab(tabId) {
@@ -713,6 +653,34 @@
                 toast.classList.remove("flex");
             }, 3000);
         }
+
+         document.addEventListener('DOMContentLoaded', () => {
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-nav-link');
+
+        if (mobileMenuBtn && mobileMenu) {
+        // Alterna entre expandir e minimizar o menu ao clicar no botão
+        mobileMenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Minimiza o menu automaticamente quando o usuário clica em um item de navegação
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Fecha o menu se o usuário clicar fora dele
+        document.addEventListener('click', (e) => {
+            if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+            mobileMenu.classList.add('hidden');
+            }
+        });
+        }
+    });
     </script>
 </body>
 </html>
